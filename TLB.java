@@ -1,6 +1,10 @@
 /**
  * TLB
+ * O tempo de acceso da tlb considerado,
+ * será a execução de acessar uma pagina armazenada na tlb, após varrer 
+ * todo o vetor tlbPages
  */
+
 public class TLB {
 
     private int size;
@@ -41,6 +45,14 @@ public class TLB {
 
     public int getSize() {
         return size;
+    }
+
+    public double getAccessTime() {
+        long begin = System.nanoTime();
+        for (int i = 0; i < tlbPages.length; i++) {}
+        tlbPages[0].getP();
+        long end = System.nanoTime();
+        return (end-begin);
     }
 
     public void printTLB() {
