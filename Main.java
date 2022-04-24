@@ -14,7 +14,7 @@
  * p = 32 - 12 = 20 bits (page number)
  * d = n = 12 = 12 bits (offset)
  * trace format = 07b243a0 R
- * p = trace first 5 bytes, d = trace last 3 bytes
+ * p = trace first 5 hex, d = trace last 3 hex
  */
 
 public class Main {
