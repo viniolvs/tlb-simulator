@@ -25,8 +25,8 @@ public class FileHandler {
             String p = new String(),  d = new String();
             String aux = new String();
             aux = input.nextLine();
-            p = aux.substring(0, 5); //page number = first 5 bytes
-            d = aux.substring(5, 7); //page offset = last 3 bytes
+            p = aux.substring(0, 5); //page number = first 5 hex digits
+            d = aux.substring(5, 7); //page offset = last 3 hex digits
             Page page = new Page(p, d);
             return new Pair(true, page);
         }
