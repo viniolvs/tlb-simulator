@@ -1,45 +1,56 @@
 /**
  * TLB
- * O tempo de acceso da tlb considerado,
- * será a execução de acessar uma pagina armazenada na tlb, após varrer 
- * todo o vetor tlbPages
+ * O tempo de acceso da tlb considerado de 4ns.
  */
+
+import java.util.LinkedList;
 
 public class TLB {
 
     private int size;
-    private Page[] tlbPages;
-    private int tlb_idx;
-    private int size_idx;
+    private LinkedList<Page> tlbPages;
+    private int nPages;
 
     public TLB(int size){
+        tlbPages = new LinkedList<>();
         this.size = size;
-        tlbPages = new Page[size];
-        tlb_idx = 0;
-        size_idx = 0;
+        nPages = 0;
     }
 
     public void addPageFIFO(Page page) {
-        if(tlb_idx < size){
-            tlbPages[tlb_idx++] = page;
-            if(size_idx < size)
-                size_idx++;
+        //tlb não está cheia
+        if(nPages < size){
+            tlbPages.addFirst(page);
+            nPages++;
         }
+        //tlb está cheia
         else{
-            tlb_idx = 0;
-            tlbPages[tlb_idx++] = page;
+            //página a ser adicionada não está na lista, remove do fim e adiciona nova page no começo
+            int index = containsPage(page);
+            if(index == -1){
+                tlbPages.removeLast();
+                tlbPages.addFirst(page);
+            }
+            //pagina ja esta na tlb, reposiciona a pagina para o começo da lista
+            else{
+                tlbPages.remove(index);
+                tlbPages.addFirst(page);
+            }
         }
     }
 
-    public boolean searchPage(Page page) {
-        for (int i = 0 ; i < size_idx ; i++) {
-            if(tlbPages[i].getP().intern() == page.getP().intern())
-                return true;
+    //returna posição da pagina na lista caso exista, ou -1 casi não exista 
+    public int containsPage(Page page) {
+        int index=0;
+        for (Page p : tlbPages) {
+            if (p.getP().intern() == page.getP().intern())
+                return index;
+            index++;
         }
-        return false;
+        return -1;
     }
-
-    public Page[] getTLB() {
+    //return the position on tlb
+    public LinkedList<Page> getTLB() {
         return tlbPages;
     }
 
@@ -47,17 +58,13 @@ public class TLB {
         return size;
     }
 
-    public double getAccessTime() {
-        long begin = System.nanoTime();
-        for (int i = 0; i < tlbPages.length; i++) {}
-        tlbPages[0].getP();
-        long end = System.nanoTime();
-        return (end-begin);
+    public static double getAccessTime() {
+        return 4;
     }
 
     public void printTLB() {
-        for (int i = 0; i < size_idx; i++) {
-            System.out.print(tlbPages[i].getP()+" ");
-        }
+       for (Page page : tlbPages) {
+           System.out.println("\nPages on TLB = "+page.getP()+" ");
+       }
     }
 }

@@ -41,10 +41,11 @@ public class Main {
                     break;
 
                 entries++;
-                if (tlb.searchPage(page) == false){
+                if (tlb.containsPage(page) == -1)
                     tlb_miss++;
-                    tlb.addPageFIFO(page);
-                }
+                
+                tlb.addPageFIFO(page);
+                
             }
             long end = System.currentTimeMillis();
 
@@ -56,10 +57,19 @@ public class Main {
 
             System.out.println("Tempo de execução = "+ (end-begin) + " milisegundos.");
 
-            System.out.println("Tempo de acesso memória = "+PT.getAccessTime() + " nanosegundos.");
+            System.out.println("Tempo de acesso memória = "+PageTable.getAccessTime() + " nanosegundos.");
             
-            System.out.println("Tempo de acesso TLB = "+tlb.getAccessTime() + " nanosegundos.");
-        
+            System.out.println("Tempo de acesso TLB = "+TLB.getAccessTime() + " nanosegundos.");
+
+            double total_memTime = tlb_miss * PageTable.getAccessTime();
+            double total_TLBTime = (entries-tlb_miss) * TLB.getAccessTime();
+
+            System.out.println("Tempo gasto acessando a memória = (Miss * MemoryAccessTime) = " + total_memTime + " nanosegundos");
+            
+            System.out.println("Tempo gasto acessando a TLB = ((Entradas - Miss) * TLBAccessTime) = " + total_TLBTime + " nanosegundos");
+
+            System.out.println("Tempo total de execução (estimado) = " + (total_TLBTime + total_memTime) + " nanosegundos");
+            
         } catch (ArrayIndexOutOfBoundsException e){
             System.err.println("format: java Main <trace filename(String)> <TLB size(int)>");
         }
