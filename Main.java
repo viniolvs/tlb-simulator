@@ -46,8 +46,6 @@ public class Main {
             }
 
             double tlb_hit_rate = ((double)(entries-tlb_miss)/(double)entries);
-            double total_memTime = tlb_miss * PageTable.getAccessTime();
-            double total_TLBTime = (entries-tlb_miss) * TLB.getAccessTime();
             double eat = ((PageTable.getAccessTime() + TLB.getAccessTime() * tlb_hit_rate) + (2 * PageTable.getAccessTime() + TLB.getAccessTime()) * (1-tlb_hit_rate));
             
             System.out.println("Entradas = " + entries +" TLB Miss = " +tlb_miss);
@@ -60,14 +58,7 @@ public class Main {
             
             System.out.println("Tempo de acesso TLB = "+TLB.getAccessTime() + " nanosegundos.");
 
-            System.out.println("Tempo gasto acessando a memória = (Miss * MemoryAccessTime) = " + total_memTime + " nanosegundos");
-            
-            System.out.println("Tempo gasto acessando a TLB = ((Entradas - Miss) * TLBAccessTime) = " + total_TLBTime + " nanosegundos");
 
-            System.out.println("Tempo total de execução (estimado) = " + (total_TLBTime + total_memTime) + " nanosegundos");
-
-
-            
         } catch (ArrayIndexOutOfBoundsException e){
             System.err.println("format: java Main <trace filename(String)> <TLB size(int)>");
         }
