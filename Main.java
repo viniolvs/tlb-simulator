@@ -30,13 +30,10 @@ public class Main {
             Page page;
             Pair pair;
 
-            long begin = System.currentTimeMillis();
             while(true){
                 pair = PT.getNextPage();
                 page = pair.getPage();
-                /*System.out.println("\nNúmero da pagina = "+page.getP());
-                System.out.print("TLB = "); tlb.printTLB();*/
-
+                
                 if(pair.getBool() == false)
                     break;
 
@@ -47,28 +44,29 @@ public class Main {
                 tlb.addPageFIFO(page);
                 
             }
-            long end = System.currentTimeMillis();
 
-            double tlb_hit_rate = ((entries-tlb_miss)*100)/entries;
+            double tlb_hit_rate = ((double)(entries-tlb_miss)/(double)entries);
+            double total_memTime = tlb_miss * PageTable.getAccessTime();
+            double total_TLBTime = (entries-tlb_miss) * TLB.getAccessTime();
+            double eat = ((PageTable.getAccessTime() + TLB.getAccessTime() * tlb_hit_rate) + (2 * PageTable.getAccessTime() + TLB.getAccessTime()) * (1-tlb_hit_rate));
+            
+            System.out.println("Entradas = " + entries +" TLB Miss = " +tlb_miss);
 
-            System.out.println("Entradas = " + entries +" Miss = " +tlb_miss);
+            System.out.println("Taxa de acerto TLB com tamanho "+tlb.getSize()+" = "+(tlb_hit_rate*100)+"%");
 
-            System.out.println("Taxa de acerto TLB com tamanho "+tlb.getSize()+" = "+tlb_hit_rate+"%");
-
-            System.out.println("Tempo de execução = "+ (end-begin) + " milisegundos.");
+            System.out.println("Effective Access Time = "+eat+" nanosegundos");
 
             System.out.println("Tempo de acesso memória = "+PageTable.getAccessTime() + " nanosegundos.");
             
             System.out.println("Tempo de acesso TLB = "+TLB.getAccessTime() + " nanosegundos.");
-
-            double total_memTime = tlb_miss * PageTable.getAccessTime();
-            double total_TLBTime = (entries-tlb_miss) * TLB.getAccessTime();
 
             System.out.println("Tempo gasto acessando a memória = (Miss * MemoryAccessTime) = " + total_memTime + " nanosegundos");
             
             System.out.println("Tempo gasto acessando a TLB = ((Entradas - Miss) * TLBAccessTime) = " + total_TLBTime + " nanosegundos");
 
             System.out.println("Tempo total de execução (estimado) = " + (total_TLBTime + total_memTime) + " nanosegundos");
+
+
             
         } catch (ArrayIndexOutOfBoundsException e){
             System.err.println("format: java Main <trace filename(String)> <TLB size(int)>");
