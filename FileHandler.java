@@ -20,7 +20,6 @@ public class FileHandler {
     }
 
     public Pair readPage() {
-        
         if (input.hasNextLine()) {
             String p = new String(),  d = new String();
             String aux = new String();
@@ -34,7 +33,6 @@ public class FileHandler {
             closeFile();
             return new Pair(false, new Page());
         }    
-        
     }
 
     public void closeFile() {
