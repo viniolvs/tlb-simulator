@@ -58,7 +58,6 @@ public class Main {
             
             System.out.println("Tempo de acesso TLB = "+TLB.getAccessTime() + " nanosegundos.");
 
-
         } catch (ArrayIndexOutOfBoundsException e){
             System.err.println("format: java Main <trace filename(String)> <TLB size(int)>");
         }

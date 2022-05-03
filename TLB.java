@@ -6,7 +6,6 @@
 import java.util.LinkedList;
 
 public class TLB {
-
     private int size;
     private LinkedList<Page> tlbPages;
     private int nPages;

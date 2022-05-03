@@ -1,4 +1,3 @@
-
 /*
  * PageTable
  */
@@ -26,5 +25,4 @@ public class PageTable {
     public static double getAccessTime() {
         return 40;
     }
-
 }
